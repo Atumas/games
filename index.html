@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameHub - 30 Epic Mini Games</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.179.1/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.birds.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 8rem);
+            font-weight: 900;
+            line-height: 0.9;
+            letter-spacing: -0.02em;
+        }
+        .game-card {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .game-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+        .game-icon {
+            font-size: 3rem;
+            background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .vanta-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        .scroll-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .floating-element {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .gradient-text {
+            background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+    <!-- Vanta.js Background -->
+    <div id="vanta-bg" class="vanta-canvas"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 backdrop-filter backdrop-blur-lg bg-white bg-opacity-10 border-b border-white border-opacity-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <i class="fas fa-gamepad text-2xl gradient-text mr-3"></i>
+                    <span class="text-white text-xl font-bold">GameHub</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#home" class="text-white hover:text-pink-300 transition-colors duration-300 font-medium">Home</a>
+                        <a href="#games" class="text-white hover:text-pink-300 transition-colors duration-300 font-medium">Games</a>
+                        <a href="#about" class="text-white hover:text-pink-300 transition-colors duration-300 font-medium">About</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center pt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="floating-element">
+                <h1 class="hero-title text-white mb-6">
+                    30 Epic
+                    <span class="gradient-text block">Mini Games</span>
+                </h1>
+                <p class="text-xl text-gray-200 mb-8 max-w-2xl mx-auto leading-relaxed">
+                    Dive into a curated collection of addictive browser games. From classic arcade hits to modern puzzle challenges, 
+                    experience hours of entertainment with stunning visuals and smooth gameplay.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <button onclick="scrollToGames()" class="bg-gradient-to-r from-pink-500 to-red-500 text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-lg transform hover:scale-105 transition-all duration-300">
+                        <i class="fas fa-rocket mr-2"></i>
+                        Start Playing
+                    </button>
+                    <div class="text-gray-300 text-sm">
+                        <i class="fas fa-users mr-1"></i>
+                        Over 10,000 players worldwide
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <i class="fas fa-chevron-down text-white text-2xl"></i>
+        </div>
+    </section>
+
+    <!-- Games Grid Section -->
+    <section id="games" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 scroll-reveal">
+                <h2 class="text-4xl md:text-6xl font-bold text-white mb-4">
+                    Game Collection
+                </h2>
+                <p class="text-xl text-gray-200 max-w-3xl mx-auto">
+                    Each game is carefully crafted with modern web technologies, featuring smooth animations, 
+                    responsive design, and addictive gameplay mechanics.
+                </p>
+            </div>
+
+            <!-- Games Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- Game cards will be dynamically generated -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-16 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div class="scroll-reveal">
+                    <div class="text-4xl font-bold text-white mb-2">30+</div>
+                    <div class="text-gray-300">Games</div>
+                </div>
+                <div class="scroll-reveal">
+                    <div class="text-4xl font-bold text-white mb-2">100%</div>
+                    <div class="text-gray-300">Free to Play</div>
+                </div>
+                <div class="scroll-reveal">
+                    <div class="text-4xl font-bold text-white mb-2">24/7</div>
+                    <div class="text-gray-300">Available</div>
+                </div>
+                <div class="scroll-reveal">
+                    <div class="text-4xl font-bold text-white mb-2">∞</div>
+                    <div class="text-gray-300">Fun</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-white border-opacity-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="flex items-center justify-center mb-4">
+                <i class="fas fa-gamepad text-2xl gradient-text mr-3"></i>
+                <span class="text-white text-xl font-bold">GameHub</span>
+            </div>
+            <p class="text-gray-300 text-sm">
+                © 2025 GameHub. Built with passion for gaming. All games are open source and free to play.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Game data with enhanced information
+        const games = [
+            { name: 'Candy Crush', folder: '01-Candy-Crush-Game', icon: 'fas fa-candy-cane', description: 'Match colorful candies in this addictive puzzle game', difficulty: 'Easy', time: '5-10 min' },
+            { name: 'Archery Game', folder: '02-Archery-Game', icon: 'fas fa-bullseye', description: 'Test your aim in this challenging archery simulation', difficulty: 'Medium', time: '10-15 min' },
+            { name: 'Speed Typing', folder: '03-Speed-Typing-Game', icon: 'fas fa-keyboard', description: 'Improve your typing speed with this engaging trainer', difficulty: 'Easy', time: '5-10 min' },
+            { name: 'Breakout', folder: '04-Breakout-Game', icon: 'fas fa-bricks', description: 'Classic brick-breaking action with modern twists', difficulty: 'Medium', time: '10-20 min' },
+            { name: 'Minesweeper', folder: '05-Minesweeper-Game', icon: 'fas fa-bomb', description: 'Clear mines carefully in this strategic puzzle', difficulty: 'Hard', time: '15-30 min' },
+            { name: 'Tower Blocks', folder: '06-Tower-Blocks', icon: 'fas fa-building', description: 'Stack blocks to build the tallest tower possible', difficulty: 'Easy', time: '5-10 min' },
+            { name: 'Ping Pong', folder: '07-Ping-Pong-Game', icon: 'fas fa-table-tennis', description: 'Classic paddle game with smooth physics', difficulty: 'Medium', time: '10-15 min' },
+            { name: 'Tetris', folder: '08-Tetris-Game', icon: 'fas fa-puzzle-piece', description: 'Timeless block-stacking puzzle game', difficulty: 'Medium', time: '15-25 min' },
+            { name: 'Tilting Maze', folder: '09-Tilting-Maze-Game', icon: 'fas fa-maze', description: 'Navigate through challenging maze puzzles', difficulty: 'Hard', time: '10-20 min' },
+            { name: 'Memory Cards', folder: '10-Memory-Card-Game', icon: 'fas fa-brain', description: 'Test your memory with colorful card matching', difficulty: 'Easy', time: '5-15 min' },
+            { name: 'Rock Paper Scissors', folder: '11-Rock-Paper-Scissors', icon: 'fas fa-hand-peace', description: 'Classic hand game with AI opponent', difficulty: 'Easy', time: '2-5 min' },
+            { name: 'Number Guessing', folder: '12-Type-Number-Guessing-Game', icon: 'fas fa-question-circle', description: 'Guess the secret number with hints', difficulty: 'Easy', time: '5-10 min' },
+            { name: 'Tic Tac Toe', folder: '13-Tic-Tac-Toe', icon: 'fas fa-times', description: 'Strategic noughts and crosses game', difficulty: 'Easy', time: '3-8 min' },
+            { name: 'Snake Game', folder: '14-Snake-Game', icon: 'fas fa-snake', description: 'Classic snake game with modern graphics', difficulty: 'Medium', time: '10-20 min' },
+            { name: 'Connect Four', folder: '15-Connect-Four-Game', icon: 'fas fa-circle-notch', description: 'Strategic four-in-a-row board game', difficulty: 'Medium', time: '10-20 min' },
+            { name: 'Insect Catch', folder: '16-Insect-Catch-Game', icon: 'fas fa-bug', description: 'Catch insects in this fast-paced action game', difficulty: 'Easy', time: '5-10 min' },
+            { name: 'Typing Game', folder: '17-Typing-Game', icon: 'fas fa-font', description: 'Word typing challenge with increasing difficulty', difficulty: 'Medium', time: '10-15 min' },
+            { name: 'Hangman', folder: '18-Hangman-Game', icon: 'fas fa-user-slash', description: 'Guess words before the hangman is complete', difficulty: 'Medium', time: '10-20 min' },
+            { name: 'Flappy Bird', folder: '19-Flappy-Bird-Game', icon: 'fas fa-dove', description: 'Navigate through pipes in this challenging game', difficulty: 'Hard', time: '5-15 min' },
+            { name: 'Crossy Road', folder: '20-Crossy-Road-Game', icon: 'fas fa-road', description: 'Cross busy roads safely in this endless game', difficulty: 'Medium', time: '10-20 min' },
+            { name: '2048', folder: '21-2048-Game', icon: 'fas fa-calculator', description: 'Merge tiles to reach the 2048 tile', difficulty: 'Hard', time: '15-30 min' },
+            { name: 'Dice Roll', folder: '22-Dice-Roll-Simulator', icon: 'fas fa-dice', description: 'Roll dice with realistic physics simulation', difficulty: 'Easy', time: '2-5 min' },
+            { name: 'Shape Clicker', folder: '23-Shape-Clicker-Game', icon: 'fas fa-shapes', description: 'Click shapes as they appear on screen', difficulty: 'Easy', time: '5-10 min' },
+            { name: 'Advanced Typing', folder: '24-Typing-Game', icon: 'fas fa-keyboard', description: 'Advanced typing test with statistics', difficulty: 'Medium', time: '10-15 min' },
+            { name: 'Voice Guessing', folder: '25-Speak-Number-Guessing-Game', icon: 'fas fa-microphone', description: 'Number guessing game with voice commands', difficulty: 'Easy', time: '5-10 min' },
+            { name: 'Fruit Slicer', folder: '26-Fruit-Slicer-Game', icon: 'fas fa-apple-alt', description: 'Slice fruits in this action-packed game', difficulty: 'Medium', time: '5-15 min' },
+            { name: 'Quiz Game', folder: '27-Quiz-Game', icon: 'fas fa-question', description: 'Test your knowledge with various quizzes', difficulty: 'Medium', time: '10-20 min' },
+            { name: 'Emoji Catcher', folder: '28-Emoji-Catcher-Game', icon: 'fas fa-smile', description: 'Catch falling emojis in this fun game', difficulty: 'Easy', time: '5-10 min' },
+            { name: 'Whack A Mole', folder: '29-Whack-A-Mole-Game', icon: 'fas fa-hammer', description: 'Classic mole whacking arcade game', difficulty: 'Easy', time: '3-8 min' },
+            { name: 'Simon Says', folder: '30-Simon-Says-Game', icon: 'fas fa-lightbulb', description: 'Memory game with light and sound patterns', difficulty: 'Medium', time: '10-20 min' }
+        ];
+
+        // Initialize Vanta.js background
+        VANTA.BIRDS({
+            el: "#vanta-bg",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00,
+            backgroundColor: 0x1a1a2e,
+            color1: 0x667eea,
+            color2: 0x764ba2,
+            birdSize: 1.2,
+            wingSpan: 25.00,
+            speedLimit: 5.00,
+            separation: 20.00,
+            alignment: 20.00,
+            cohesion: 20.00,
+            quantity: 3.00
+        });
+
+        // Generate game cards
+        function generateGameCards() {
+            const gamesGrid = document.querySelector('.grid');
+            
+            games.forEach((game, index) => {
+                const card = document.createElement('div');
+                card.className = 'game-card rounded-2xl p-6 scroll-reveal';
+                card.style.animationDelay = `${index * 0.1}s`;
+                
+                const difficultyColor = {
+                    'Easy': 'text-green-400',
+                    'Medium': 'text-yellow-400',
+                    'Hard': 'text-red-400'
+                };
+
+                card.innerHTML = `
+                    <div class="text-center">
+                        <div class="game-icon mb-4">
+                            <i class="${game.icon}"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">${game.name}</h3>
+                        <p class="text-gray-300 text-sm mb-4 leading-relaxed">${game.description}</p>
+                        <div class="flex justify-between items-center mb-4 text-xs">
+                            <span class="${difficultyColor[game.difficulty]} font-semibold">${game.difficulty}</span>
+                            <span class="text-gray-400">${game.time}</span>
+                        </div>
+                        <button onclick="playGame('${game.folder}')" 
+                                class="w-full bg-gradient-to-r from-pink-500 to-red-500 text-white py-3 rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300">
+                            <i class="fas fa-play mr-2"></i>Play Now
+                        </button>
+                    </div>
+                `;
+                
+                gamesGrid.appendChild(card);
+            });
+        }
+
+        // Play game function
+        function playGame(folder) {
+            window.location.href = `${folder}/index.html`;
+        }
+
+        // Smooth scroll to games section
+        function scrollToGames() {
+            document.getElementById('games').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        // Scroll reveal animation
+        function revealOnScroll() {
+            const reveals = document.querySelectorAll('.scroll-reveal');
+            
+            reveals.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('revealed');
+                }
+            });
+        }
+
+        // Initialize everything when DOM loads
+        document.addEventListener('DOMContentLoaded', function() {
+            generateGameCards();
+            revealOnScroll();
+        });
+
+        // Add scroll event listener
+        window.addEventListener('scroll', revealOnScroll);
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
